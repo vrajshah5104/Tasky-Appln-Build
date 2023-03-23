@@ -42,7 +42,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form>
+          <form onsubmit="return false">
             <!-- For Image -->
             <div class="mb-3">
               <label for="imageUrl" class="form-label">Image URL</label>
@@ -127,7 +127,8 @@
               <div class="col-md-6">
                   <div class="input-group flex-nowrap shadow-lg rounded">
                       <input type="search" class="form-control" placeholder="Search your Tasks here" 
-                             aria-label="Search Task" aria-describedby="addon-wrapping">
+                             aria-label="Search Task" aria-describedby="addon-wrapping"
+                             oninput="searchTask.apply(this, arguments)">
                       <span class="input-group-text" id="addon-wrapping">
                           <i class="fa-solid fa-magnifying-glass"></i>
                       </span>

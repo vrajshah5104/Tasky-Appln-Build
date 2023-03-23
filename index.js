@@ -23,8 +23,9 @@ const htmlTaskContent = ({id, title, description, type, url}) => `
                     <i class="fa-solid fa-pen-fancy" name=${id}></i>
                 </button>
                 <button type="button" class="btn btn-outline-danger mr-1.5"
-                        onclick="deleteTask.apply(this, arguments)" name=${id}>
-                    <i class="fa-solid fa-trash-can" name=${id}"></i>
+                         onclick="deleteTask.apply(this, arguments)" name=${id}>
+                    <i class="fa-solid fa-trash-can" 
+                        onclick="deleteTask.apply(this, arguments)" name=${id}"></i>
                 </button>
             </div>
             <div class="class-body">
@@ -41,7 +42,8 @@ const htmlTaskContent = ({id, title, description, type, url}) => `
             </div>
             <div class="card-footer">
                 <button type="button" class="btn btn-outline-info float-right" data-bs-toggle="modal"
-                        data-bs-target="#showTask" onclick="openTask()" id=${id}>Open Task</button>
+                        data-bs-target="#showTask"
+                        onclick="openTask.apply(this, arguments)" id=${id}>Open Task</button>
             </div>
         </div>
     </div>
@@ -95,8 +97,8 @@ const handleSubmit = (event1) => {
         type: document.getElementById("taskType").value,
         description: document.getElementById("taskDescription").value,
     };
-    if (input.title=="" || input.tags=="" || input.description=="") {
-        return alert("Please cum inside all the necessary fields ;-)");
+    if (input.title === "" || input.type === "" || input.description === "") {
+        return alert ("Please cum inside all the necessary fields ;-)");
     }
     taskContents.insertAdjacentHTML (
         "beforeend", htmlTaskContent({...input, id})
@@ -148,7 +150,7 @@ const deleteTask = (event3) => {
     // console.log(targetId); // Can do this to check the id of the trash/delete buttons
     const type = event3.target.tagName;
     // console.log(type); // Can do this to check if you are clicking on an icon or a button
-    const removeTask = state.taskList.filter(({id}) => targetId);
+    const removeTask = state.taskList.filter(({id}) => id !== targetId);
     updateLocalStorage();
 
     // Removing the child from UI
@@ -172,17 +174,17 @@ const editTask = (event4) => {
     if (!event4) {
         event4 = window.event;
     }
-    const targetId = e.target.id;
-    const type = e.target.tagName;
+    const targetId = event4.target.id;
+    const type = event4.target.tagName;
 
     let parentNode, taskTitle, taskDescription, taskType, submitButton;
 
     // Logic for 'Line-22'
     if (type === "BUTTON") {
-        parentNode = e.target.parentNode.parentNode;
+        parentNode = event4.target.parentNode.parentNode;
     }
     else {
-        parentNode = e.target.parentNode.parentNode.parentNode;
+        parentNode = event4.target.parentNode.parentNode.parentNode;
     }
 
     taskTitle = parentNode.childNodes[3].childNodes[3];
@@ -190,9 +192,9 @@ const editTask = (event4) => {
     taskType = parentNode.childNodes[3].childNodes[7].childNodes[1];
     submitButton = parentNode.childNodes[5].childNodes[1];
 
-    taskTitle.setAttribute("contentEditable", "true");
-    taskDescription.setAttribute("contentEditable", "true");
-    taskType.setAttribute("contentEditable", "true");
+    taskTitle.setAttribute("contenteditable", "true");
+    taskDescription.setAttribute("contenteditable", "true");
+    taskType.setAttribute("contenteditable", "true");
 
     submitButton.setAttribute("onclick", "saveEdit.apply(this, arguments)");
     submitButton.setAttribute("data-bs-toggle");
@@ -234,9 +236,9 @@ const saveEdit = (event5) => {
     state.taskList = stateCopy;
     updateLocalStorage();
 
-    taskTitle.setAttribute("contentEditable", "false");
-    taskDescription.setAttribute("contentEditable", "false");
-    taskType.setAttribute("contentEditable", "false");
+    taskTitle.setAttribute("contenteditable", "false");
+    taskDescription.setAttribute("contenteditable", "false");
+    taskType.setAttribute("contenteditable", "false");
 
     submitButton.setAttribute("onclick", "openTask.apply(this, arguments)");
     submitButton.setAttribute("data-bs-toggle", "modal");
@@ -256,9 +258,7 @@ const searchTask = (event6) => {
         title.toLowerCase().includes(event6.target.value.toLowerCase())
     )
 
-    resultData.map (
+    resultData.map ((cardDate) =>
         (cardDate) => taskContents.insertAdjacentElement("beforeend", htmlTaskContent(cardDate))
     )
 }
-
-// Continue watching from Day-36 5:28
